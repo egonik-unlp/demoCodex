@@ -107,11 +107,7 @@ function setup() {
     });
   }
   chart.addEventListener("pointerdown", (event) => {
-    const scale = makeScale(points);
-    const t = invertX(event.offsetX, scale);
-    const addDistance = Math.abs(t - Number(additionTime.value));
-    const correctedDistance = Math.abs(t - Number(correctedTime.value));
-    dragMode = addDistance < correctedDistance ? "addition" : "corrected";
+    dragMode = "corrected";
     chart.setPointerCapture(event.pointerId);
   });
   chart.addEventListener("pointermove", (event) => {

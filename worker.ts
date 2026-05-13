@@ -62,10 +62,11 @@ const html = String.raw`<!doctype html>
 
         <section class="fit-panel">
           <h2>Ajuste</h2>
-          <label>
-            <span>t adicion <output id="additionValue"></output></span>
-            <input id="additionTime" type="range" step="0.5" />
-          </label>
+          <div class="fixed-reading">
+            <span>t adicion</span>
+            <strong><output id="additionValue"></output></strong>
+          </div>
+          <input id="additionTime" type="hidden" />
           <label>
             <span>Fin tramo inicial <output id="preEndValue"></output></span>
             <input id="preEnd" type="range" step="0.5" />
