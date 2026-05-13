@@ -78,6 +78,16 @@ const html = String.raw`<!doctype html>
             <span>Tiempo corregido <output id="correctedTimeValue"></output></span>
             <input id="correctedTime" type="range" step="0.5" />
           </label>
+          <div class="fit-live" aria-label="Lectura rapida del ajuste">
+            <div>
+              <span>Delta T</span>
+              <strong id="fitDeltaReadout">-</strong>
+            </div>
+            <div>
+              <span>Diferencia de areas</span>
+              <strong id="fitAreaDiffReadout">-</strong>
+            </div>
+          </div>
           <button id="autoBalanceButton" type="button">Igualar areas</button>
         </section>
 

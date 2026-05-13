@@ -56,9 +56,11 @@ const readouts = {
   postStartValue: mustElement<HTMLOutputElement>("postStartValue"),
   correctedTimeValue: mustElement<HTMLOutputElement>("correctedTimeValue"),
   delta: mustElement<HTMLElement>("deltaReadout"),
+  fitDelta: mustElement<HTMLElement>("fitDeltaReadout"),
   leftArea: mustElement<HTMLElement>("leftAreaReadout"),
   rightArea: mustElement<HTMLElement>("rightAreaReadout"),
   areaDiff: mustElement<HTMLElement>("areaDiffReadout"),
+  fitAreaDiff: mustElement<HTMLElement>("fitAreaDiffReadout"),
   preFit: mustElement<HTMLElement>("preFitReadout"),
   postFit: mustElement<HTMLElement>("postFitReadout"),
   initialTemp: mustElement<HTMLElement>("initialTempReadout"),
@@ -274,9 +276,11 @@ function renderReadouts(preFit: Fit, postFit: Fit, initialTemp: number, finalTem
   readouts.postStartValue.value = `${formatNumber(Number(postStart.value), 1)} s`;
   readouts.correctedTimeValue.value = `${formatNumber(Number(correctedTime.value), 1)} s`;
   readouts.delta.textContent = `${formatNumber(delta, 3)} °C`;
+  readouts.fitDelta.textContent = `${formatNumber(delta, 3)} °C`;
   readouts.leftArea.textContent = `${formatNumber(areas.left, 2)} °C s`;
   readouts.rightArea.textContent = `${formatNumber(areas.right, 2)} °C s`;
   readouts.areaDiff.textContent = `${formatNumber(areas.diff, 2)} °C s`;
+  readouts.fitAreaDiff.textContent = `${formatNumber(areas.diff, 2)} °C s`;
   readouts.preFit.textContent = `T = ${formatNumber(preFit.slope, 5)} t + ${formatNumber(preFit.intercept, 3)}`;
   readouts.postFit.textContent = `T = ${formatNumber(postFit.slope, 5)} t + ${formatNumber(postFit.intercept, 3)}`;
   readouts.initialTemp.textContent = `${formatNumber(initialTemp, 3)} °C`;
