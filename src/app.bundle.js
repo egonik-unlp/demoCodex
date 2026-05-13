@@ -14,11 +14,15 @@ var additionTime = mustElement("additionTime");
 var preEnd = mustElement("preEnd");
 var postStart = mustElement("postStart");
 var correctedTime = mustElement("correctedTime");
+var preOffset = mustElement("preOffset");
+var postOffset = mustElement("postOffset");
 var readouts = {
   additionValue: mustElement("additionValue"),
   preEndValue: mustElement("preEndValue"),
   postStartValue: mustElement("postStartValue"),
   correctedTimeValue: mustElement("correctedTimeValue"),
+  preOffsetValue: mustElement("preOffsetValue"),
+  postOffsetValue: mustElement("postOffsetValue"),
   delta: mustElement("deltaReadout"),
   fitDelta: mustElement("fitDeltaReadout"),
   leftArea: mustElement("leftAreaReadout"),
@@ -84,8 +88,8 @@ function setup() {
     render();
   });
   autoBalanceButton.addEventListener("click", () => {
-    const preFit = fitForRange(points, minT(points), Number(preEnd.value));
-    const postFit = fitForRange(points, Number(postStart.value), maxT(points));
+    const preFit = adjustedFit(fitForRange(points, minT(points), Number(preEnd.value)), Number(preOffset.value));
+    const postFit = adjustedFit(fitForRange(points, Number(postStart.value), maxT(points)), Number(postOffset.value));
     const balanced = findBalancedTime(points, preFit, postFit, Number(preEnd.value), Number(postStart.value));
     correctedTime.value = String(roundToStep(balanced, 0.5));
     render();
@@ -94,9 +98,11 @@ function setup() {
   downloadCsvButton.addEventListener("click", downloadCsv);
   downloadJsonButton.addEventListener("click", downloadJson);
   downloadReportButton.addEventListener("click", downloadReport);
-  for (const input of [additionTime, preEnd, postStart, correctedTime]) {
+  for (const input of [additionTime, preEnd, postStart, correctedTime, preOffset, postOffset]) {
     input.addEventListener("input", () => {
-      normalizeRanges(input);
+      if (input !== preOffset && input !== postOffset) {
+        normalizeRanges(input);
+      }
       render();
     });
   }
@@ -138,6 +144,8 @@ function configureRanges(dataset) {
   preEnd.value = String(dataset.preEnd);
   postStart.value = String(dataset.postStart);
   correctedTime.value = String(dataset.correctedTime);
+  preOffset.value = "0";
+  postOffset.value = "0";
   normalizeRanges(additionTime);
 }
 function normalizeRanges(changed) {
@@ -166,8 +174,8 @@ function render() {
     return;
   const minTime = minT(points);
   const maxTime = maxT(points);
-  const preFit = fitForRange(points, minTime, Number(preEnd.value));
-  const postFit = fitForRange(points, Number(postStart.value), maxTime);
+  const preFit = adjustedFit(fitForRange(points, minTime, Number(preEnd.value)), Number(preOffset.value));
+  const postFit = adjustedFit(fitForRange(points, Number(postStart.value), maxTime), Number(postOffset.value));
   const corrected = Number(correctedTime.value);
   const areas = calculateAreas(points, preFit, postFit, Number(preEnd.value), Number(postStart.value), corrected);
   const initialTemp = evaluate(preFit, corrected);
@@ -211,6 +219,8 @@ function renderReadouts(preFit, postFit, initialTemp, finalTemp, delta, areas) {
   readouts.preEndValue.value = `${formatNumber(Number(preEnd.value), 1)} s`;
   readouts.postStartValue.value = `${formatNumber(Number(postStart.value), 1)} s`;
   readouts.correctedTimeValue.value = `${formatNumber(Number(correctedTime.value), 1)} s`;
+  readouts.preOffsetValue.value = `${signedNumber(Number(preOffset.value), 2)} °C`;
+  readouts.postOffsetValue.value = `${signedNumber(Number(postOffset.value), 2)} °C`;
   readouts.delta.textContent = `${formatNumber(delta, 3)} °C`;
   readouts.fitDelta.textContent = `${formatNumber(delta, 3)} °C`;
   readouts.leftArea.textContent = `${formatNumber(areas.left, 2)} °C s`;
@@ -254,6 +264,8 @@ function downloadReport() {
     `Fin tramo inicial: ${formatNumber(analysis.controls.preEnd, 2)} s`,
     `Inicio tramo final: ${formatNumber(analysis.controls.postStart, 2)} s`,
     `Tiempo corregido: ${formatNumber(analysis.controls.correctedTime, 2)} s`,
+    `Movimiento linea inicial: ${signedNumber(analysis.controls.preLineOffset, 2)} C`,
+    `Movimiento linea final: ${signedNumber(analysis.controls.postLineOffset, 2)} C`,
     "",
     `Recta inicial: T = ${formatNumber(analysis.fits.pre.slope, 6)} t + ${formatNumber(analysis.fits.pre.intercept, 4)}`,
     `Recta final: T = ${formatNumber(analysis.fits.post.slope, 6)} t + ${formatNumber(analysis.fits.post.intercept, 4)}`,
@@ -269,8 +281,8 @@ function downloadReport() {
 `), `${fileBaseName()}-resumen.txt`, "text/plain;charset=utf-8");
 }
 function currentAnalysis() {
-  const preFit = fitForRange(points, minT(points), Number(preEnd.value));
-  const postFit = fitForRange(points, Number(postStart.value), maxT(points));
+  const preFit = adjustedFit(fitForRange(points, minT(points), Number(preEnd.value)), Number(preOffset.value));
+  const postFit = adjustedFit(fitForRange(points, Number(postStart.value), maxT(points)), Number(postOffset.value));
   const corrected = Number(correctedTime.value);
   const areas = calculateAreas(points, preFit, postFit, Number(preEnd.value), Number(postStart.value), corrected);
   const initialTemp = evaluate(preFit, corrected);
@@ -285,7 +297,9 @@ function currentAnalysis() {
       additionTime: Number(additionTime.value),
       preEnd: Number(preEnd.value),
       postStart: Number(postStart.value),
-      correctedTime: corrected
+      correctedTime: corrected,
+      preLineOffset: Number(preOffset.value),
+      postLineOffset: Number(postOffset.value)
     },
     fits: {
       pre: preFit,
@@ -411,6 +425,12 @@ function fitForRange(data, from, to) {
   const slope = denominator === 0 ? 0 : (n * sumXY - sumX * sumY) / denominator;
   return { slope, intercept: sumY / n - slope * (sumX / n) };
 }
+function adjustedFit(fit, offset) {
+  return {
+    slope: fit.slope,
+    intercept: fit.intercept + offset
+  };
+}
 function calculateAreas(data, preFit, postFit, preLimit, postLimit, corrected) {
   const left = integrateDifference(data, preFit, postFit, preLimit, corrected, "left");
   const right = integrateDifference(data, preFit, postFit, corrected, postLimit, "right");
@@ -473,8 +493,8 @@ function makeScale(data) {
   const width = mobile ? Math.max(320, Math.round(rect.width || window.innerWidth || 360)) : Math.max(640, Math.round(rect.width || 760));
   const height = mobile ? 310 : Math.max(420, Math.round(rect.height || 520));
   const margin = mobile ? { top: 34, right: 14, bottom: 38, left: 44 } : { top: 42, right: 28, bottom: 46, left: 58 };
-  const preFit = fitForRange(data, minT(data), Number(preEnd.value || minT(data)));
-  const postFit = fitForRange(data, Number(postStart.value || maxT(data)), maxT(data));
+  const preFit = adjustedFit(fitForRange(data, minT(data), Number(preEnd.value || minT(data))), Number(preOffset.value || 0));
+  const postFit = adjustedFit(fitForRange(data, Number(postStart.value || maxT(data)), maxT(data)), Number(postOffset.value || 0));
   const minTime = minT(data);
   const maxTime = maxT(data);
   const minTemp = minY(data, preFit, postFit);
@@ -620,6 +640,10 @@ function formatNumber(value, digits) {
     minimumFractionDigits: digits,
     maximumFractionDigits: digits
   });
+}
+function signedNumber(value, digits) {
+  const formatted = formatNumber(value, digits);
+  return value > 0 ? `+${formatted}` : formatted;
 }
 function mustElement(id) {
   const element = document.getElementById(id);

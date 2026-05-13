@@ -78,6 +78,14 @@ const html = String.raw`<!doctype html>
             <span>Tiempo corregido <output id="correctedTimeValue"></output></span>
             <input id="correctedTime" type="range" step="0.5" />
           </label>
+          <label>
+            <span>Linea inicial <output id="preOffsetValue"></output></span>
+            <input id="preOffset" type="range" min="-2" max="2" step="0.02" />
+          </label>
+          <label>
+            <span>Linea final <output id="postOffsetValue"></output></span>
+            <input id="postOffset" type="range" min="-2" max="2" step="0.02" />
+          </label>
           <div class="fit-live" aria-label="Lectura rapida del ajuste">
             <div>
               <span>Delta T</span>
