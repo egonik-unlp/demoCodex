@@ -348,9 +348,54 @@ dd {
 }
 
 @media (max-width: 640px) {
-  .workbench {
-    padding: 10px;
+  .app {
+    display: grid;
+    grid-template-columns: 1fr;
     gap: 10px;
+    padding-bottom: 18px;
+  }
+
+  .workbench {
+    display: contents;
+  }
+
+  .controls {
+    display: contents;
+  }
+
+  .topbar,
+  .chart-shell,
+  .readouts,
+  .controls section {
+    margin-inline: 10px;
+  }
+
+  .topbar {
+    order: 1;
+  }
+
+  .data-panel {
+    order: 2;
+  }
+
+  .fit-panel {
+    order: 3;
+  }
+
+  .chart-shell {
+    order: 4;
+  }
+
+  .readouts {
+    order: 5;
+  }
+
+  .results-panel {
+    order: 6;
+  }
+
+  .save-panel {
+    order: 7;
   }
 
   .topbar {
@@ -372,7 +417,6 @@ dd {
   }
 
   .chart-shell {
-    margin-inline: -10px;
     border-width: 1px 0;
     overflow: hidden;
   }
@@ -424,12 +468,10 @@ dd {
     overflow-wrap: anywhere;
   }
 
-  .controls {
-    padding: 16px 14px 24px;
-    gap: 20px;
-  }
-
   .controls section {
+    background: #ffffff;
+    border: 1px solid #d8dee6;
+    padding: 14px;
     gap: 12px;
   }
 
@@ -444,7 +486,7 @@ dd {
   }
 
   textarea {
-    min-height: 120px;
+    min-height: 86px;
     font-size: 0.82rem;
   }
 

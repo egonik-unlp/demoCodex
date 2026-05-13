@@ -50,7 +50,7 @@ const html = String.raw`<!doctype html>
       </section>
 
       <aside class="controls" aria-label="Controles">
-        <section>
+        <section class="data-panel">
           <h2>Datos</h2>
           <div class="button-row">
             <button id="loadDummyButton" type="button">Datos modelo</button>
@@ -60,7 +60,7 @@ const html = String.raw`<!doctype html>
           <p id="csvStatus" class="status">Pegue dos columnas: tiempo, temperatura.</p>
         </section>
 
-        <section>
+        <section class="fit-panel">
           <h2>Ajuste</h2>
           <label>
             <span>t adicion <output id="additionValue"></output></span>
@@ -81,7 +81,7 @@ const html = String.raw`<!doctype html>
           <button id="autoBalanceButton" type="button">Igualar areas</button>
         </section>
 
-        <section>
+        <section class="results-panel">
           <h2>Resultados</h2>
           <dl class="details">
             <div>
@@ -107,7 +107,7 @@ const html = String.raw`<!doctype html>
           </dl>
         </section>
 
-        <section>
+        <section class="save-panel">
           <h2>Guardar</h2>
           <div class="button-row">
             <button id="downloadSvgButton" type="button">Guardar grafico</button>
