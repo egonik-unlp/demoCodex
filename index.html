@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calorimetria: neutralizacion</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <section class="workbench" aria-label="Aproximacion grafica">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow">Calorimetria</p>
+            <h1>Correccion grafica de Delta T</h1>
+          </div>
+          <label class="dataset-picker">
+            <span>Medicion</span>
+            <select id="datasetSelect"></select>
+          </label>
+        </header>
+
+        <div class="chart-shell">
+          <svg id="chart" role="img" aria-label="Grafico de temperatura en funcion del tiempo"></svg>
+        </div>
+
+        <section class="readouts" aria-label="Lecturas calculadas">
+          <article>
+            <span>Delta T corregido</span>
+            <strong id="deltaReadout">-</strong>
+          </article>
+          <article>
+            <span>Area inicial</span>
+            <strong id="leftAreaReadout">-</strong>
+          </article>
+          <article>
+            <span>Area final</span>
+            <strong id="rightAreaReadout">-</strong>
+          </article>
+          <article>
+            <span>Diferencia</span>
+            <strong id="areaDiffReadout">-</strong>
+          </article>
+        </section>
+      </section>
+
+      <aside class="controls" aria-label="Controles">
+        <section>
+          <h2>Datos</h2>
+          <div class="button-row">
+            <button id="loadDummyButton" type="button">Datos modelo</button>
+            <button id="loadCsvButton" type="button">Usar CSV</button>
+          </div>
+          <textarea id="csvInput" spellcheck="false" aria-label="Datos CSV"></textarea>
+          <p id="csvStatus" class="status">Pegue dos columnas: tiempo, temperatura.</p>
+        </section>
+
+        <section>
+          <h2>Ajuste</h2>
+          <label>
+            <span>t adicion <output id="additionValue"></output></span>
+            <input id="additionTime" type="range" step="0.5" />
+          </label>
+          <label>
+            <span>Fin tramo inicial <output id="preEndValue"></output></span>
+            <input id="preEnd" type="range" step="0.5" />
+          </label>
+          <label>
+            <span>Inicio tramo final <output id="postStartValue"></output></span>
+            <input id="postStart" type="range" step="0.5" />
+          </label>
+          <label>
+            <span>Tiempo corregido <output id="correctedTimeValue"></output></span>
+            <input id="correctedTime" type="range" step="0.5" />
+          </label>
+          <button id="autoBalanceButton" type="button">Igualar areas</button>
+        </section>
+
+        <section>
+          <h2>Resultados</h2>
+          <dl class="details">
+            <div>
+              <dt>Recta inicial</dt>
+              <dd id="preFitReadout">-</dd>
+            </div>
+            <div>
+              <dt>Recta final</dt>
+              <dd id="postFitReadout">-</dd>
+            </div>
+            <div>
+              <dt>T inicial corregida</dt>
+              <dd id="initialTempReadout">-</dd>
+            </div>
+            <div>
+              <dt>T final corregida</dt>
+              <dd id="finalTempReadout">-</dd>
+            </div>
+            <div>
+              <dt>Estado</dt>
+              <dd id="balanceStatus">-</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section>
+          <h2>Guardar</h2>
+          <div class="button-row">
+            <button id="downloadSvgButton" type="button">Guardar grafico</button>
+            <button id="downloadCsvButton" type="button">Guardar tabla</button>
+            <button id="downloadJsonButton" type="button">Guardar trabajo</button>
+            <button id="downloadReportButton" type="button">Guardar resumen</button>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <script type="module" src="/src/app.js"></script>
+  </body>
+</html>

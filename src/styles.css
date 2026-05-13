@@ -1,0 +1,457 @@
+:root {
+  color-scheme: light;
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  background: #f4f6f8;
+  color: #17202a;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+}
+
+button,
+select,
+textarea,
+input {
+  font: inherit;
+}
+
+.app {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 360px;
+}
+
+.workbench {
+  min-width: 0;
+  padding: 24px;
+  display: grid;
+  grid-template-rows: auto minmax(340px, 1fr) auto;
+  gap: 16px;
+}
+
+.topbar,
+.readouts,
+.controls {
+  background: #ffffff;
+  border: 1px solid #d8dee6;
+}
+
+.topbar {
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 20px;
+}
+
+.eyebrow {
+  margin: 0 0 4px;
+  color: #667085;
+  font-size: 0.82rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+h1,
+h2 {
+  margin: 0;
+  letter-spacing: 0;
+}
+
+h1 {
+  font-size: clamp(1.45rem, 2.4vw, 2.2rem);
+}
+
+h2 {
+  font-size: 0.98rem;
+}
+
+.dataset-picker {
+  min-width: 220px;
+  display: grid;
+  gap: 6px;
+  color: #475467;
+  font-size: 0.9rem;
+}
+
+select,
+textarea,
+input[type="range"] {
+  width: 100%;
+}
+
+select,
+textarea {
+  border: 1px solid #c7d0dc;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #17202a;
+}
+
+select {
+  min-height: 42px;
+  padding: 0 10px;
+}
+
+.chart-shell {
+  min-height: 0;
+  background: #ffffff;
+  border: 1px solid #d8dee6;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#chart {
+  width: 100%;
+  height: 100%;
+  min-height: 420px;
+  display: block;
+}
+
+.readouts {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.readouts article {
+  min-width: 0;
+  padding: 16px 18px;
+  border-right: 1px solid #d8dee6;
+}
+
+.readouts article:last-child {
+  border-right: 0;
+}
+
+.readouts span {
+  display: block;
+  color: #667085;
+  font-size: 0.82rem;
+}
+
+.readouts strong {
+  display: block;
+  margin-top: 4px;
+  font-size: 1.25rem;
+}
+
+.controls {
+  height: 100vh;
+  overflow: auto;
+  padding: 20px;
+  display: grid;
+  align-content: start;
+  gap: 22px;
+  border-width: 0 0 0 1px;
+}
+
+.controls section {
+  display: grid;
+  gap: 14px;
+}
+
+.button-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+button {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 1px solid #1f6f8b;
+  border-radius: 6px;
+  background: #247c9f;
+  color: #ffffff;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1f6f8b;
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+  padding: 10px;
+  line-height: 1.45;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.86rem;
+}
+
+.status {
+  margin: -6px 0 0;
+  color: #667085;
+  font-size: 0.84rem;
+}
+
+label {
+  display: grid;
+  gap: 8px;
+}
+
+label span {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  color: #475467;
+  font-size: 0.88rem;
+}
+
+output {
+  color: #17202a;
+  font-weight: 700;
+}
+
+input[type="range"] {
+  accent-color: #247c9f;
+  min-height: 34px;
+}
+
+.details {
+  margin: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.details div {
+  padding: 10px 0;
+  border-bottom: 1px solid #e7ebf0;
+}
+
+.details div:last-child {
+  border-bottom: 0;
+}
+
+dt {
+  color: #667085;
+  font-size: 0.8rem;
+}
+
+dd {
+  margin: 3px 0 0;
+  font-weight: 700;
+}
+
+.axis text,
+.chart-label {
+  fill: #475467;
+  font-size: 12px;
+}
+
+.grid-line {
+  stroke: #e7ebf0;
+  stroke-width: 1;
+}
+
+.axis-line {
+  stroke: #98a2b3;
+  stroke-width: 1;
+}
+
+.data-line {
+  fill: none;
+  stroke: #1f6f8b;
+  stroke-width: 2.5;
+}
+
+.data-point {
+  fill: #247c9f;
+}
+
+.fit-pre {
+  stroke: #7a5af8;
+  stroke-width: 2;
+  stroke-dasharray: 7 5;
+}
+
+.fit-post {
+  stroke: #d94b2b;
+  stroke-width: 2;
+  stroke-dasharray: 7 5;
+}
+
+.marker-addition {
+  stroke: #344054;
+  stroke-width: 2;
+}
+
+.marker-corrected {
+  stroke: #1a7f37;
+  stroke-width: 2.5;
+}
+
+.area-left {
+  fill: rgba(122, 90, 248, 0.24);
+}
+
+.area-right {
+  fill: rgba(217, 75, 43, 0.24);
+}
+
+.ghost-region {
+  fill: rgba(36, 124, 159, 0.06);
+}
+
+@media (max-width: 980px) {
+  .app {
+    grid-template-columns: 1fr;
+    min-height: 100svh;
+  }
+
+  .controls {
+    height: auto;
+    border-width: 1px 0 0;
+  }
+
+  .workbench {
+    padding: 14px;
+    grid-template-rows: auto auto auto;
+  }
+
+  .topbar {
+    display: grid;
+    min-height: auto;
+    padding: 16px;
+  }
+
+  .dataset-picker {
+    min-width: 0;
+  }
+
+  .readouts {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .readouts article {
+    padding: 14px;
+    border-right: 0;
+    border-bottom: 1px solid #d8dee6;
+  }
+
+  .readouts article:nth-last-child(-n + 2) {
+    border-bottom: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .workbench {
+    padding: 10px;
+    gap: 10px;
+  }
+
+  .topbar {
+    padding: 14px;
+    gap: 12px;
+  }
+
+  .eyebrow {
+    font-size: 0.76rem;
+  }
+
+  h1 {
+    font-size: 1.28rem;
+    line-height: 1.18;
+  }
+
+  h2 {
+    font-size: 0.94rem;
+  }
+
+  .chart-shell {
+    margin-inline: -10px;
+    border-width: 1px 0;
+  }
+
+  #chart {
+    width: 760px;
+    height: 390px;
+    min-height: 390px;
+  }
+
+  .readouts {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .readouts span {
+    font-size: 0.76rem;
+  }
+
+  .readouts strong {
+    font-size: 1.02rem;
+    overflow-wrap: anywhere;
+  }
+
+  .controls {
+    padding: 16px 14px 24px;
+    gap: 20px;
+  }
+
+  .controls section {
+    gap: 12px;
+  }
+
+  .button-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  button {
+    width: 100%;
+    min-height: 46px;
+  }
+
+  textarea {
+    min-height: 120px;
+    font-size: 0.82rem;
+  }
+
+  label {
+    gap: 6px;
+  }
+
+  label span {
+    align-items: flex-end;
+    font-size: 0.84rem;
+  }
+
+  output {
+    white-space: nowrap;
+  }
+
+  .details {
+    gap: 6px;
+  }
+
+  .details div {
+    padding: 8px 0;
+  }
+
+  dd {
+    overflow-wrap: anywhere;
+  }
+}
+
+@media (max-width: 380px) {
+  .readouts {
+    grid-template-columns: 1fr;
+  }
+
+  .readouts article:nth-last-child(-n + 2) {
+    border-bottom: 1px solid #d8dee6;
+  }
+
+  .readouts article:last-child {
+    border-bottom: 0;
+  }
+}

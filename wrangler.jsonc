@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "calorimetria-neutralizacion",
+  "main": "worker.ts",
+  "compatibility_date": "2026-05-12",
+  "rules": [
+    {
+      "type": "Text",
+      "globs": ["**/*.css", "**/*.bundle.js"],
+      "fallthrough": true
+    }
+  ]
+}

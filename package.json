@@ -1,0 +1,22 @@
+{
+  "name": "democodex",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "bun build ./src/app.ts --outfile ./src/app.bundle.js",
+    "dev": "bun run build && bun --hot ./index.ts",
+    "start": "bun run build && bun run ./index.ts",
+    "cf:dev": "bun run build && wrangler dev",
+    "cf:deploy": "bun run build && wrangler deploy",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "latest",
+    "@types/bun": "latest",
+    "wrangler": "^4.17.0"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
