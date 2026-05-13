@@ -197,10 +197,12 @@ function renderChart(preFit, postFit, _areas) {
   addLine(scale.x(minTime), scale.y(evaluate(postFit, minTime)), scale.x(maxTime), scale.y(evaluate(postFit, maxTime)), "fit-post");
   addLine(scale.x(add), scale.margin.top, scale.x(add), scale.height - scale.margin.bottom, "marker-addition");
   addLine(scale.x(corrected), scale.margin.top, scale.x(corrected), scale.height - scale.margin.bottom, "marker-corrected");
-  addText(scale.x(add) + 6, scale.margin.top + 18, "t adicion", "chart-label");
-  addText(scale.x(corrected) + 6, scale.margin.top + 36, "t corregido", "chart-label");
-  addText(scale.margin.left, 24, "Temperatura (°C)", "chart-label");
-  addText(scale.width - scale.margin.right - 86, scale.height - 12, "Tiempo (s)", "chart-label");
+  const addLabel = scale.mobile ? "agregado" : "t adicion";
+  const correctedLabel = scale.mobile ? "t*" : "t corregido";
+  addText(clamp(scale.x(add) + 5, scale.margin.left + 4, scale.width - scale.margin.right - 54), scale.margin.top + 16, addLabel, "chart-label marker-label");
+  addText(clamp(scale.x(corrected) + 5, scale.margin.left + 4, scale.width - scale.margin.right - 54), scale.margin.top + (scale.mobile ? 32 : 36), correctedLabel, "chart-label marker-label");
+  addText(scale.margin.left, scale.mobile ? 18 : 24, scale.mobile ? "T (°C)" : "Temperatura (°C)", "chart-label");
+  addText(scale.width - scale.margin.right - (scale.mobile ? 36 : 86), scale.height - 12, scale.mobile ? "t (s)" : "Tiempo (s)", "chart-label");
 }
 function renderReadouts(preFit, postFit, initialTemp, finalTemp, delta, areas) {
   readouts.additionValue.value = `${formatNumber(Number(additionTime.value), 1)} s`;
@@ -463,9 +465,10 @@ function interpolate(data, t) {
 }
 function makeScale(data) {
   const rect = chart.getBoundingClientRect();
-  const width = Math.max(760, rect.width || 760);
-  const height = Math.max(420, rect.height || 520);
-  const margin = { top: 42, right: 28, bottom: 46, left: 58 };
+  const mobile = window.matchMedia("(max-width: 640px)").matches;
+  const width = mobile ? Math.max(320, Math.round(rect.width || window.innerWidth || 360)) : Math.max(640, Math.round(rect.width || 760));
+  const height = mobile ? 310 : Math.max(420, Math.round(rect.height || 520));
+  const margin = mobile ? { top: 34, right: 14, bottom: 38, left: 44 } : { top: 42, right: 28, bottom: 46, left: 58 };
   const preFit = fitForRange(data, minT(data), Number(preEnd.value || minT(data)));
   const postFit = fitForRange(data, Number(postStart.value || maxT(data)), maxT(data));
   const minTime = minT(data);
@@ -475,6 +478,7 @@ function makeScale(data) {
   return {
     width,
     height,
+    mobile,
     margin,
     x: (value) => margin.left + (value - minTime) / (maxTime - minTime) * (width - margin.left - margin.right),
     y: (value) => margin.top + (maxTemp - value) / (maxTemp - minTemp) * (height - margin.top - margin.bottom)
@@ -503,17 +507,17 @@ function buildAreaPath(data, preFit, postFit, from, to, scale, side) {
   return `${top} ${base} Z`;
 }
 function addGrid(scale, minTime, maxTime, minTemp, maxTemp) {
-  const xTicks = ticks(minTime, maxTime, 6);
-  const yTicks = ticks(minTemp, maxTemp, 6);
+  const xTicks = ticks(minTime, maxTime, scale.mobile ? 3 : 6);
+  const yTicks = ticks(minTemp, maxTemp, scale.mobile ? 4 : 6);
   for (const tick of xTicks) {
     const x = scale.x(tick);
     addLine(x, scale.margin.top, x, scale.height - scale.margin.bottom, "grid-line");
-    addText(x - 12, scale.height - scale.margin.bottom + 24, formatNumber(tick, 0), "chart-label");
+    addText(x, scale.height - scale.margin.bottom + 24, formatNumber(tick, 0), "chart-label tick-label", "middle");
   }
   for (const tick of yTicks) {
     const y = scale.y(tick);
     addLine(scale.margin.left, y, scale.width - scale.margin.right, y, "grid-line");
-    addText(10, y + 4, formatNumber(tick, 1), "chart-label");
+    addText(scale.margin.left - 8, y + 4, formatNumber(tick, 1), "chart-label tick-label", "end");
   }
   addLine(scale.margin.left, scale.margin.top, scale.margin.left, scale.height - scale.margin.bottom, "axis-line");
   addLine(scale.margin.left, scale.height - scale.margin.bottom, scale.width - scale.margin.right, scale.height - scale.margin.bottom, "axis-line");
@@ -557,10 +561,11 @@ function addRect(x, y, width, height, className) {
   rect.setAttribute("class", className);
   chart.append(rect);
 }
-function addText(x, y, value, className) {
+function addText(x, y, value, className, anchor = "start") {
   const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
   text.setAttribute("x", String(x));
   text.setAttribute("y", String(y));
+  text.setAttribute("text-anchor", anchor);
   text.setAttribute("class", className);
   text.textContent = value;
   chart.append(text);
